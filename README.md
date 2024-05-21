@@ -79,14 +79,14 @@ Current release info
 Installing biome
 ================
 
-Installing `biome` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `biome` from the `conda-forge/label/biome_dev` channel can be achieved by adding `conda-forge/label/biome_dev` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/biome_dev
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `biome` can be installed with `conda`:
+Once the `conda-forge/label/biome_dev` channel has been enabled, `biome` can be installed with `conda`:
 
 ```
 conda install biome
@@ -101,26 +101,26 @@ mamba install biome
 It is possible to list all of the versions of `biome` available on your platform with `conda`:
 
 ```
-conda search biome --channel conda-forge
+conda search biome --channel conda-forge/label/biome_dev
 ```
 
 or with `mamba`:
 
 ```
-mamba search biome --channel conda-forge
+mamba search biome --channel conda-forge/label/biome_dev
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search biome --channel conda-forge
+mamba repoquery search biome --channel conda-forge/label/biome_dev
 
 # List packages depending on `biome`:
-mamba repoquery whoneeds biome --channel conda-forge
+mamba repoquery whoneeds biome --channel conda-forge/label/biome_dev
 
 # List dependencies of `biome`:
-mamba repoquery depends biome --channel conda-forge
+mamba repoquery depends biome --channel conda-forge/label/biome_dev
 ```
 
 
