@@ -1,5 +1,5 @@
 {% set name = "biome" %}
-{% set version = "1.8.3" %}
+{% set version = "1.8.4-nightly.d079e53" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/biomejs/{{ name }}/archive/refs/tags/cli/v{{ version }}.tar.gz
-  sha256: 8e263bbc1ff644036409471f10320870510025fa1850912a02b1abcfc92ced79
+  sha256: 5346b9b394848c9bccc5f93c3625029d7ddab4c7287a2ecd9fe6caa346ad0de6
 
 build:
   number: 0
