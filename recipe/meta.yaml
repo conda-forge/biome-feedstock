@@ -10,7 +10,7 @@ source:
   sha256: fc06a89e1b925e8b1dfaca98f7af1d8e04d27acdcaeff786e2806f8bc26283f9
 
 build:
-  number: 0
+  number: 1
   script_env:
     - BIOME_VERSION={{ version }}
     - RUSTFLAGS=-Cstrip=symbols
