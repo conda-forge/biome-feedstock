@@ -17,7 +17,7 @@ build:
   script:
     env:
       BIOME_VERSION: ${{ version }}
-      RUSTFLAGS: "-Cstrip=symbols"
+      RUSTFLAGS: ${{ "-Cstrip=symbols" ~ (" -C link-arg=-Wl,-rpath-link,${PREFIX}/lib -L${PREFIX}/lib" if osx else "")}}
     content:
       - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
       - if: unix
@@ -34,7 +34,8 @@ requirements:
     - make
     - cargo-bundle-licenses
   host:
-    - libiconv
+    - if: osx
+      then: libiconv
 
 tests:
   - script:
