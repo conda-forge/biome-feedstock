@@ -33,6 +33,8 @@ requirements:
     - ${{ stdlib('c') }}
     - make
     - cargo-bundle-licenses
+  host:
+    - libiconv
 
 tests:
   - script:
