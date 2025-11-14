@@ -13,7 +13,7 @@ source:
   sha256: aeec9d21f73f4eda7b6eb63fcb7ebb0c6968e3776b8fc6140486dce95ff2db0b
 
 build:
-  number: 2
+  number: 0
   script:
     env:
       BIOME_VERSION: ${{ version }}
