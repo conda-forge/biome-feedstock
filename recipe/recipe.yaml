@@ -17,7 +17,10 @@ build:
   script:
     env:
       BIOME_VERSION: ${{ version }}
+      # OSX would link with /usr/lib/libiconv.2.dylib
       RUSTFLAGS: ${{ "-Cstrip=symbols" ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "") }}
+      # Reduce parallelism to reduce max memory
+      CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
     content:
       - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
       - if: unix
