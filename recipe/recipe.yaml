@@ -1,43 +1,47 @@
-{% set name = "biome" %}
-{% set version = "1.9.4" %}
+schema_version: 1
+
+context:
+  name: biome
+  version: 2.0.1
 
 package:
-  name: {{ name|lower }}
-  version: {{ version }}
+  name: ${{ name|lower }}
+  version: ${{ version }}
 
 source:
-  url: https://github.com/biomejs/{{ name }}/archive/refs/tags/cli/v{{ version }}.tar.gz
-  sha256: fc06a89e1b925e8b1dfaca98f7af1d8e04d27acdcaeff786e2806f8bc26283f9
+  url: https://github.com/biomejs/${{ name }}/archive/refs/tags/@biomejs/biome@${{ version }}.tar.gz
+  sha256: aeec9d21f73f4eda7b6eb63fcb7ebb0c6968e3776b8fc6140486dce95ff2db0b
 
 build:
-  number: 1
-  script_env:
-    - BIOME_VERSION={{ version }}
-    - RUSTFLAGS=-Cstrip=symbols
+  number: 2
   script:
-    - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
-    - cargo install --locked --root "$PREFIX" --path crates/biome_cli           # [unix]
-    - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli  # [win]
+    env:
+      BIOME_VERSION: ${{ version }}
+      RUSTFLAGS: "-Cstrip=symbols"
+    content:
+      - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+      - if: unix
+        then:
+          - cargo install --locked --root "$PREFIX" --path crates/biome_cli
+        else:
+          - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli
 
 requirements:
   build:
-    - {{ compiler('rust') }}
-    - {{ compiler('c') }}
-    - {{ stdlib('c') }}
+    - ${{ compiler('rust') }}
+    - ${{ compiler('c') }}
+    - ${{ stdlib('c') }}
     - make
     - cargo-bundle-licenses
 
-test:
-  commands:
-    - biome --version
+tests:
+  - script:
+      - biome --version
 
 about:
-  home: https://biomejs.dev
-  doc_url: https://biomejs.dev/guides/getting-started/
-  dev_url: https://github.com/biomejs/biome
   summary: |
     A toolchain for web projects, aimed to provide functionalities to maintain them.
-    Biome offers formatter and linter, usable via CLI and LSP. 
+    Biome offers formatter and linter, usable via CLI and LSP.
   description: |
     Biome is a performant toolchain for web projects, it aims to provide developer tools to maintain the health of said projects.
     Biome is a fast formatter for JavaScript, TypeScript, JSX, and JSON that scores 97% compatibility with Prettier.
@@ -46,10 +50,12 @@ about:
     Biome is designed from the start to be used interactively within an editor.
     It can format and lint malformed code as you are writing it.
   license: MIT
-  license_family: MIT
   license_file:
     - LICENSE-MIT
     - THIRDPARTY.yml
+  homepage: https://biomejs.dev
+  repository: https://github.com/biomejs/biome
+  documentation: https://biomejs.dev/guides/getting-started/
 
 extra:
   recipe-maintainers:
