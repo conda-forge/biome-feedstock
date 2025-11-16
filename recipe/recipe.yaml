@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: biome
-  version: 2.0.1
+  version: 2.3.5
 
 package:
   name: ${{ name|lower }}
@@ -10,21 +10,29 @@ package:
 
 source:
   url: https://github.com/biomejs/${{ name }}/archive/refs/tags/@biomejs/biome@${{ version }}.tar.gz
-  sha256: aeec9d21f73f4eda7b6eb63fcb7ebb0c6968e3776b8fc6140486dce95ff2db0b
+  sha256: 39c685ea028d5dd8db101b93c96a0956fb6f7846da93caa49231a62c612daa77
 
 build:
   number: 0
   script:
     env:
       BIOME_VERSION: ${{ version }}
-      RUSTFLAGS: ${{ "-Cstrip=symbols" ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "") }}
+      # OSX would link with /usr/lib/libiconv.2.dylib
+      RUSTFLAGS: >
+        ${{
+          "-C strip=symbols"
+          ~ (" -C lto=thin" if linux else "")
+          ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "")
+        }}
+      # Reduce parallelism to reduce max memory
+      CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
     content:
       - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
       - if: unix
         then:
-          - cargo install --locked --root "$PREFIX" --path crates/biome_cli
+          - cargo install --locked --root "$PREFIX" --path crates/biome_cli -v
         else:
-          - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli
+          - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli -v
 
 requirements:
   build:
