@@ -18,13 +18,7 @@ build:
     env:
       BIOME_VERSION: ${{ version }}
       # OSX would link with /usr/lib/libiconv.2.dylib
-      # Using mold to reduce memory impact in CI, also needs explicit link paths
-      RUSTFLAGS: >-
-        ${{
-          "-C strip=symbols"
-          ~ (" -C link-arg=-fuse-ld=mold" if linux else "")
-          ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if unix else "")
-        }}
+      RUSTFLAGS: ${{ "-Cstrip=symbols" ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "") }}
       # Reduce parallelism to reduce max memory
       CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
     content:
@@ -42,8 +36,6 @@ requirements:
     - ${{ stdlib('c') }}
     - make
     - cargo-bundle-licenses
-    - if: linux
-      then: mold
   host:
     - if: osx
       then: libiconv
