@@ -25,9 +25,9 @@ build:
       - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
       - if: unix
         then:
-          - cargo install --locked --root "$PREFIX" --path crates/biome_cli
+          - cargo install --locked --root "$PREFIX" --path crates/biome_cli -v
         else:
-          - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli
+          - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli -v
 
 requirements:
   build:
