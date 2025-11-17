@@ -20,7 +20,7 @@ build:
       # OSX would link with /usr/lib/libiconv.2.dylib
       RUSTFLAGS: >
         ${{
-          "-C strip=symbols -C lto=thin"
+          "-C strip=symbols -C embed-bitcode=yes -C lto=thin"
           ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "")
         }}
       # Reduce parallelism to reduce max memory
