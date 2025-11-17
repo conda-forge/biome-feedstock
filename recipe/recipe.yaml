@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: biome
-  version: 2.3.5
+  version: "2.3.6"
 
 package:
   name: ${{ name|lower }}
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/biomejs/${{ name }}/archive/refs/tags/@biomejs/biome@${{ version }}.tar.gz
-  sha256: 39c685ea028d5dd8db101b93c96a0956fb6f7846da93caa49231a62c612daa77
+  sha256: 0ba5afb0076bb267d2e734e158a613363b8eb238406fd8032444e549bcc1ea65
 
 build:
   number: 0
