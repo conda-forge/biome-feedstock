@@ -2,7 +2,8 @@ schema_version: 1
 
 context:
   name: biome
-  version: "2.3.6"
+  version: 2.3.5
+  library_prefix: ${{ "${PREFIX}" if "unix" else "%LIBRARY_PREFIX%"}}
 
 package:
   name: ${{ name|lower }}
@@ -17,20 +18,15 @@ build:
   script:
     env:
       BIOME_VERSION: ${{ version }}
-      # OSX would link with /usr/lib/libiconv.2.dylib
-      # Remove LTO on Windows and switch to thin otherwise to save memory
-      RUSTFLAGS: >
-        -C strip=symbols -C lto=${{ "off" if win else "thin" }}
-        ${{ "-C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "" }}
-      # Reduce parallelism to reduce max memory
+      # Reduce parallelism to reduce max memory usage
       CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
+      CARGO_PROFILE_RELEASE_LTO: ${{ "thin" if unix else "no" }}
     content:
-      - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
       - if: unix
-        then:
-          - cargo install --locked --root "$PREFIX" --path crates/biome_cli -v
-        else:
-          - cargo install --locked --root "%LIBRARY_PREFIX%" --path crates/biome_cli -v
+        then: export CARGO_BUILD_RUSTFLAGS="${CARGO_BUILD_RUSTFLAGS} -C strip=symbols"
+        else: set CARGO_BUILD_RUSTFLAGS="-C strip=symbols"
+      - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+      - cargo install --locked --root "${{ library_prefix }}" --path crates/biome_cli -v
 
 requirements:
   build:
