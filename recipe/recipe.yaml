@@ -18,11 +18,10 @@ build:
     env:
       BIOME_VERSION: ${{ version }}
       # OSX would link with /usr/lib/libiconv.2.dylib
+      # Remove LTO on Windows and switch to thin otherwise to save memory
       RUSTFLAGS: >
-        ${{
-          "-C strip=symbols -C embed-bitcode=yes -C lto=thin"
-          ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "")
-        }}
+        -C strip=symbols -C lto=${{ "off" if win else "thin" }}
+        ${{ "-C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "" }}
       # Reduce parallelism to reduce max memory
       CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
     content:
