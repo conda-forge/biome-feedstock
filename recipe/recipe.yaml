@@ -13,15 +13,14 @@ source:
   sha256: 0ba5afb0076bb267d2e734e158a613363b8eb238406fd8032444e549bcc1ea65
 
 build:
-  number: 0
+  number: 1
   script:
     env:
       BIOME_VERSION: ${{ version }}
       # OSX would link with /usr/lib/libiconv.2.dylib
       RUSTFLAGS: >
         ${{
-          "-C strip=symbols"
-          ~ (" -C lto=thin" if linux else "")
+          "-C strip=symbols -C lto=thin"
           ~ (" -C link-arg=-Wl,-rpath,${PREFIX}/lib -L${PREFIX}/lib" if osx else "")
         }}
       # Reduce parallelism to reduce max memory
