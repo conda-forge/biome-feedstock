@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: biome
   version: 2.3.6
-  library_prefix: ${{ "${PREFIX}" if "unix" else "%LIBRARY_PREFIX%" }}
+  library_prefix: ${{ "${PREFIX}" if unix else "%LIBRARY_PREFIX%" }}
 
 package:
   name: ${{ name|lower }}
