@@ -3,7 +3,7 @@ schema_version: 1
 context:
   name: biome
   version: 2.3.6
-  library_prefix: ${{ "${PREFIX}" if "unix" else "%LIBRARY_PREFIX%"}}
+  library_prefix: ${{ "${PREFIX}" if "unix" else "%LIBRARY_PREFIX%" }}
 
 package:
   name: ${{ name|lower }}
@@ -24,7 +24,7 @@ build:
     content:
       - if: unix
         then: export CARGO_BUILD_RUSTFLAGS="${CARGO_BUILD_RUSTFLAGS} -C strip=symbols"
-        else: set CARGO_BUILD_RUSTFLAGS="-C strip=symbols"
+        else: set CARGO_BUILD_RUSTFLAGS=%CARGO_BUILD_RUSTFLAGS% -C strip=symbols
       - cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
       - cargo install --locked --root "${{ library_prefix }}" --path crates/biome_cli -v
 
