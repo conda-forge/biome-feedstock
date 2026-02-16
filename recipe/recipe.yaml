@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   name: biome
-  version: "2.3.15"
+  version: "2.4.0"
   library_prefix: ${{ "${PREFIX}" if unix else "%LIBRARY_PREFIX%" }}
 
 package:
@@ -11,7 +11,7 @@ package:
 
 source:
   url: https://github.com/biomejs/${{ name }}/archive/refs/tags/@biomejs/biome@${{ version }}.tar.gz
-  sha256: ba117dc1e095592921909899eb036ecf801941c1b7adba7d0de2defea1d2a955
+  sha256: 0810327e92519f686f3a3811870fb5bdaad328fd605dda19a4bef3b994acba9f
 
 build:
   number: 0
