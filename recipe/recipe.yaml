@@ -22,11 +22,16 @@ build:
       CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
       CARGO_PROFILE_RELEASE_LTO: ${{ "thin" if unix else "no" }}
     content:
-      # Fix for long path support on Windows (cargo pulls some deps via git)
+      # Cargo pulls some deps via git, whose checkout paths exceed MAX_PATH.
+      # Shorten the cargo dir and let git handle long paths. The config is set
+      # through the environment because HOME is not a writable path on the runner.
       - if: win
         then:
-          - git config --global core.longpaths true
           - set "CARGO_HOME=%BUILD_PREFIX:~0,2%\cargo"
+          - set "CARGO_NET_GIT_FETCH_WITH_CLI=true"
+          - set "GIT_CONFIG_COUNT=1"
+          - set "GIT_CONFIG_KEY_0=core.longpaths"
+          - set "GIT_CONFIG_VALUE_0=true"
       - if: unix
         then: export CARGO_BUILD_RUSTFLAGS="${CARGO_BUILD_RUSTFLAGS} -C strip=symbols"
         else: set CARGO_BUILD_RUSTFLAGS=%CARGO_BUILD_RUSTFLAGS% -C strip=symbols
