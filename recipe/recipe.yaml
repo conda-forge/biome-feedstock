@@ -22,6 +22,11 @@ build:
       CARGO_BUILD_JOBS: ${{ "1" if env.exists("CI") else "-1" }}
       CARGO_PROFILE_RELEASE_LTO: ${{ "thin" if unix else "no" }}
     content:
+      # Fix for long path support on Windows (cargo pulls some deps via git)
+      - if: win
+        then:
+          - git config --global core.longpaths true
+          - set "CARGO_HOME=%BUILD_PREFIX:~0,2%\cargo"
       - if: unix
         then: export CARGO_BUILD_RUSTFLAGS="${CARGO_BUILD_RUSTFLAGS} -C strip=symbols"
         else: set CARGO_BUILD_RUSTFLAGS=%CARGO_BUILD_RUSTFLAGS% -C strip=symbols
